@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,54 +21,64 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.examschedulingproject.business.abstracts.ICourseService;
+import com.examschedulingproject.business.abstracts.IExamService;
 import com.examschedulingproject.core.utilities.results.DataResult;
 import com.examschedulingproject.core.utilities.results.ErrorDataResult;
 import com.examschedulingproject.core.utilities.results.Result;
 import com.examschedulingproject.dataAccess.abstracts.ICourseDao;
+import com.examschedulingproject.dataAccess.abstracts.IStudentDao;
 import com.examschedulingproject.entities.concretes.Course;
+import com.examschedulingproject.entities.concretes.Exam;
+import com.examschedulingproject.entities.concretes.Student;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/courses")
-public class CoursesController {
+@RequestMapping("/api/exams")
+public class ExamsController {
 	
-	private ICourseService courseService;
+	private IExamService examService;
 	private ICourseDao courseDao;
+	private IStudentDao studentDao;
 
 	@Autowired
-	public CoursesController(ICourseService courseService, ICourseDao courseDao) {
+	public ExamsController(IExamService examService, IStudentDao studentDao, ICourseDao courseDao) {
 		super();
-		this.courseService = courseService;
+		this.examService = examService;
 		this.courseDao = courseDao;
+		this.studentDao = studentDao;
 	}
 	
-	@PostMapping("/add")
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> addCourse(@Valid @RequestBody Course course) {
-		return ResponseEntity.ok(this.courseService.add(course));
-	}
+	@PostMapping("/add/{courseId}")
+	@PreAuthorize("hasRole('ADMIN')")	
+    public ResponseEntity<?> addExamToCourse(@PathVariable Long courseId, @RequestBody Exam exam) {
+        Course course = courseDao.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found with id: " + courseId));
+
+        exam.setCourse(course);
+        return ResponseEntity.ok(this.examService.add(exam));
+    }
+
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	 public Result deleteById(@PathVariable("id") Long id) {
-	    return this.courseService.delete(id);
+	    return this.examService.delete(id);
 	 }
 	
-	@GetMapping("/getallcourses")
+	@GetMapping("/getallexams")
 	@PreAuthorize("hasRole('ADMIN')")
-	public DataResult<List<Course>> getAllCourse(){
-		return this.courseService.getAllCourse();
+	public DataResult<List<Exam>> getAllExam(){
+		return this.examService.getAllExam();
 	}
 	
-	@GetMapping("/getCourseById/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
-	public Course getById(@PathVariable Long id) {
-		return courseDao.findById(id)
-				.orElseThrow();
-	}
+	@GetMapping("/student/{id}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('STUDENT')")
+    public DataResult<List<Exam>> getExamsByStudent(@PathVariable("id") Long studentId) {
+        Student student = studentDao.findById(studentId).orElseThrow();
+        
+        return examService.getExamsByStudent(student);
+    }
 	
-	 
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -84,6 +92,5 @@ public class CoursesController {
 		ErrorDataResult<Object> errors = new ErrorDataResult<Object>(validationErrors, "Doğrulama Hataları");
 		return errors;
 	}
-	
 
 }

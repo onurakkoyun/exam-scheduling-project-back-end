@@ -43,7 +43,7 @@ public class Course{
 	private String courseName;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "course")
+	@OneToMany(mappedBy = "course", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Exam> exams;
 	
 	@NotNull(message = "Teacher must not be null!")
@@ -54,12 +54,5 @@ public class Course{
 	@JsonIgnore
 	@OneToMany(mappedBy = "course", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<CourseRegistration> courseRegistrations;
-	
-	/*@ManyToMany(mappedBy = "courses")
-	private List<Student> students;*/
-	
-	/*@ManyToMany(mappedBy = "courses")
-	List<Teacher> teacher;*/
 
-	
 }

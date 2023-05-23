@@ -1,7 +1,6 @@
 package com.examschedulingproject.entities.concretes;
 
-import java.time.LocalDateTime;
-
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,15 +29,15 @@ public class Exam {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "exam_name")
-	private String examName;
+	@Column(name = "description")
+	private String description;
 	
 	@Column(name = "exam_type")
 	private String examType;
 	
 	@Future
 	@Column(name = "exam_date")
-	private LocalDateTime examDate;
+	private LocalDate examDate;
 	
 	@Column(name = "start_time")
 	private String startTime;
@@ -46,11 +45,20 @@ public class Exam {
 	@Column(name = "end_time")
 	private String endTime;
 	
+	/*@NotNull
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="registration_id")	
+	private CourseRegistration courseRegistration;*/
+	
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="course_id")	
-	Course course;
+	private Course course;
 	
+	@NotNull
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="registration_id")	
+	private CourseRegistration courseRegistration;
 	
 
 }

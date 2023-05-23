@@ -2,17 +2,16 @@ package com.examschedulingproject.business.abstracts;
 
 import java.util.List;
 
-
 import com.examschedulingproject.core.utilities.results.DataResult;
 import com.examschedulingproject.core.utilities.results.Result;
-import com.examschedulingproject.entities.concretes.Course;
+import com.examschedulingproject.entities.concretes.Exam;
 import com.examschedulingproject.entities.concretes.Student;
 
-public interface IStudentService {
-	Result add(Student student);
+public interface IExamService {
+	Result add(Exam exam);
 	Result delete(Long id);
-	DataResult<List<Student>> getAllStudent();
+	DataResult<List<Exam>> getAllExam();
 	
-	DataResult<List<Course>> getCoursesByStudent(Long id);
-	
+	DataResult<List<Exam>> getExamsByStudent(Student student);
+
 }

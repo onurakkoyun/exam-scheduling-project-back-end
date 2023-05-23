@@ -30,6 +30,7 @@ import com.examschedulingproject.core.utilities.results.DataResult;
 import com.examschedulingproject.core.utilities.results.ErrorDataResult;
 import com.examschedulingproject.core.utilities.results.Result;
 import com.examschedulingproject.dataAccess.abstracts.IStudentDao;
+import com.examschedulingproject.entities.concretes.Course;
 import com.examschedulingproject.entities.concretes.Student;
 import com.examschedulingproject.exceptions.UserNotFoundException;
 
@@ -75,6 +76,13 @@ public class StudentsController {
 		return studentDao.findById(id)
 				.orElseThrow();
 	}
+	
+	@GetMapping("/{id}/courses")
+	@PreAuthorize("hasRole('ADMIN')")
+	public DataResult<List<Course>> getCoursesByStudent(@PathVariable Long id){
+		return this.studentService.getCoursesByStudent(id);		
+	}
+	
 	 
 	 @PutMapping("/updateStudentById/{id}")
 	 @PreAuthorize("hasRole('ADMIN')")
