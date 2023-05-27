@@ -1,6 +1,5 @@
 package com.examschedulingproject.business.concretes;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import com.examschedulingproject.core.utilities.results.SuccessDataResult;
 import com.examschedulingproject.core.utilities.results.SuccessResult;
 import com.examschedulingproject.dataAccess.abstracts.ICourseRegistrationDao;
 import com.examschedulingproject.dataAccess.abstracts.IStudentDao;
-import com.examschedulingproject.entities.concretes.Course;
 import com.examschedulingproject.entities.concretes.CourseRegistration;
 import com.examschedulingproject.entities.concretes.Student;
 
@@ -49,19 +47,19 @@ public class StudentManager implements IStudentService{
 	}
 
 	@Override
-	public DataResult<List<Course>> getCoursesByStudent(Long id) {
+	public DataResult<List<CourseRegistration>> getCourseRegistrationsByStudent(Long id) {
 		Student student = studentDao.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Student not found with ID: " + id));
 
         List<CourseRegistration> registrations = courseRegistrationDao.findByStudent(student);
-        List<Course> courses = new ArrayList<>();
+        /*List<Course> courses = new ArrayList<>();
 
         for (CourseRegistration registration : registrations) {
             courses.add(registration.getCourse());
-        }
+        }*/
 
-        return new SuccessDataResult<List<Course>>
-		(courses, "Courses listed.");
+        return new SuccessDataResult<List<CourseRegistration>>
+		(registrations, "Courses listed.");
 	}
 
 

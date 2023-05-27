@@ -17,6 +17,7 @@ import com.examschedulingproject.entities.concretes.Course;
 import com.examschedulingproject.entities.concretes.CourseRegistration;
 import com.examschedulingproject.entities.concretes.Exam;
 import com.examschedulingproject.entities.concretes.Student;
+import com.examschedulingproject.exceptions.UserNotFoundException;
 @Service
 public class ExamManager implements IExamService{
 	
@@ -58,6 +59,22 @@ public class ExamManager implements IExamService{
         return new SuccessDataResult<List<Exam>>
         (this.examDao.findByCourseIdIn(courseIds),"Exams listed.");
     }
+
+	@Override
+	public DataResult<Exam> updateExamById(Exam newExam, Long id) {
+		return new SuccessDataResult<Exam>
+		(this.examDao.findById(id)
+				 .map(exam -> {
+					 exam.setExamDate(newExam.getExamDate());
+					 exam.setStartTime(newExam.getStartTime());
+					 exam.setEndTime(newExam.getEndTime());
+					 exam.setExamType(newExam.getExamType());
+					 exam.setDescription(newExam.getDescription());
+	                return examDao.save(exam);
+	                })
+				 .orElseThrow(() -> new UserNotFoundException(id)), "Exam updated.");
+		 
+	}
 
 
 }

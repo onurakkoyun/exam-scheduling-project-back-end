@@ -13,5 +13,7 @@ public interface IExamService {
 	DataResult<List<Exam>> getAllExam();
 	
 	DataResult<List<Exam>> getExamsByStudent(Student student);
+	
+	DataResult<Exam> updateExamById(Exam exam, Long id);
 
 }

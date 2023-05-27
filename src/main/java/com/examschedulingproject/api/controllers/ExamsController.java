@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -49,7 +50,7 @@ public class ExamsController {
 	}
 	
 	@PostMapping("/add/{courseId}")
-	@PreAuthorize("hasRole('ADMIN')")	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")	
     public ResponseEntity<?> addExamToCourse(@PathVariable Long courseId, @RequestBody Exam exam) {
         Course course = courseDao.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found with id: " + courseId));
@@ -61,7 +62,7 @@ public class ExamsController {
 	
 	@DeleteMapping("/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	 public Result deleteById(@PathVariable("id") Long id) {
+	public Result deleteById(@PathVariable("id") Long id) {
 	    return this.examService.delete(id);
 	 }
 	
@@ -78,6 +79,12 @@ public class ExamsController {
         
         return examService.getExamsByStudent(student);
     }
+	
+	@PutMapping("/edit/{id}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
+	public DataResult<Exam> updateExamById(@RequestBody Exam newExam, @PathVariable Long id) {
+		return examService.updateExamById(newExam, id);
+	}
 	
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)

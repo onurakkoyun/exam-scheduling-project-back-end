@@ -53,5 +53,4 @@ public class CourseRegistration {
     @Column(name = "registeredAt", updatable = false)
     private LocalDateTime registeredAt;
 
-
 }

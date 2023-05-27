@@ -39,9 +39,9 @@ public class CourseRegistrationManager implements ICourseRegistrationService{
 	public Result add(Long studentId, Long courseId) {
 		
 		Student student = studentDao.findById(studentId)
-                .orElseThrow(() -> new RuntimeException("Öğrenci bulunamadı."));
+                .orElseThrow(() -> new RuntimeException("Student not found!"));
         Course course = courseDao.findById(courseId)
-                .orElseThrow(() -> new RuntimeException("Kurs bulunamadı."));
+                .orElseThrow(() -> new RuntimeException("Course not found!"));
 
         CourseRegistration registerCourse = new CourseRegistration();
         registerCourse.setStudent(student);

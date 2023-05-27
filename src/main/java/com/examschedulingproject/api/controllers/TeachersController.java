@@ -30,6 +30,8 @@ import com.examschedulingproject.core.utilities.results.DataResult;
 import com.examschedulingproject.core.utilities.results.ErrorDataResult;
 import com.examschedulingproject.core.utilities.results.Result;
 import com.examschedulingproject.dataAccess.abstracts.ITeacherDao;
+import com.examschedulingproject.entities.concretes.Course;
+import com.examschedulingproject.entities.concretes.Exam;
 import com.examschedulingproject.entities.concretes.Teacher;
 import com.examschedulingproject.exceptions.UserNotFoundException;
 
@@ -89,6 +91,18 @@ public class TeachersController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public DataResult<List<Teacher>> getAllTeacher(){
 		return this.teacherService.getAllTeacher();
+	}
+	
+	@GetMapping("/{id}/courses")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
+	public DataResult<List<Course>> getCoursesByTeacher(@PathVariable Long id){
+		return this.teacherService.getCoursesByTeacher(id);
+	}
+	
+	@GetMapping("/{id}/exams")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
+	public DataResult<List<Exam>> getExamsByTeacherId(@PathVariable Long id){
+		return this.teacherService.getExamsByTeacherId(id);
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)

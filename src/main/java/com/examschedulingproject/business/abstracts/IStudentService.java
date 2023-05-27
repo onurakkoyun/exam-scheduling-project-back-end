@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.examschedulingproject.core.utilities.results.DataResult;
 import com.examschedulingproject.core.utilities.results.Result;
-import com.examschedulingproject.entities.concretes.Course;
+import com.examschedulingproject.entities.concretes.CourseRegistration;
 import com.examschedulingproject.entities.concretes.Student;
 
 public interface IStudentService {
@@ -13,6 +13,6 @@ public interface IStudentService {
 	Result delete(Long id);
 	DataResult<List<Student>> getAllStudent();
 	
-	DataResult<List<Course>> getCoursesByStudent(Long id);
+	DataResult<List<CourseRegistration>> getCourseRegistrationsByStudent(Long id);
 	
 }

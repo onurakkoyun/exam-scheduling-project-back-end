@@ -64,7 +64,7 @@ public class CoursesController {
 	}
 	
 	@GetMapping("/getCourseById/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
 	public Course getById(@PathVariable Long id) {
 		return courseDao.findById(id)
 				.orElseThrow();
