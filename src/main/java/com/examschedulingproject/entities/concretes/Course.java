@@ -55,4 +55,52 @@ public class Course{
 	@OneToMany(mappedBy = "course", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<CourseRegistration> courseRegistrations;
 
+	public Teacher getTeacher() {
+		return teacher;
+	}
+
+	public void setTeacher(Teacher teacher) {
+		this.teacher = teacher;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getCourseCode() {
+		return courseCode;
+	}
+
+	public void setCourseCode(String courseCode) {
+		this.courseCode = courseCode;
+	}
+
+	public String getCourseName() {
+		return courseName;
+	}
+
+	public void setCourseName(String courseName) {
+		this.courseName = courseName;
+	}
+
+	public List<Exam> getExams() {
+		return exams;
+	}
+
+	public void setExams(List<Exam> exams) {
+		this.exams = exams;
+	}
+
+	public List<CourseRegistration> getCourseRegistrations() {
+		return courseRegistrations;
+	}
+
+	public void setCourseRegistrations(List<CourseRegistration> courseRegistrations) {
+		this.courseRegistrations = courseRegistrations;
+	}
+
 }

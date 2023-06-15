@@ -78,7 +78,7 @@ public class StudentsController {
 	}
 	
 	@GetMapping("/{id}/courseRegistrations")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('STUDENT')")
 	public DataResult<List<CourseRegistration>> getCourseRegistrationsByStudent(@PathVariable Long id){
 		return this.studentService.getCourseRegistrationsByStudent(id);		
 	}

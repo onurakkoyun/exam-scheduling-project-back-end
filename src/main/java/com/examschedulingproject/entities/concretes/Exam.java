@@ -45,10 +45,9 @@ public class Exam {
 	@Column(name = "end_time")
 	private String endTime;
 	
-	/*@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="registration_id")	
-	private CourseRegistration courseRegistration;*/
+    @JoinColumn(name = "classroom_id")
+    private ClassRoom classRoom;
 	
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -59,6 +58,70 @@ public class Exam {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="registration_id")	
 	private CourseRegistration courseRegistration;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getExamType() {
+		return examType;
+	}
+
+	public void setExamType(String examType) {
+		this.examType = examType;
+	}
+
+	public LocalDate getExamDate() {
+		return examDate;
+	}
+
+	public void setExamDate(LocalDate examDate) {
+		this.examDate = examDate;
+	}
+
+	public String getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+
+	public Course getCourse() {
+		return course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
+	}
+
+	public CourseRegistration getCourseRegistration() {
+		return courseRegistration;
+	}
+
+	public void setCourseRegistration(CourseRegistration courseRegistration) {
+		this.courseRegistration = courseRegistration;
+	}
 	
 
 }

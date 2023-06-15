@@ -27,6 +27,7 @@ import com.examschedulingproject.core.utilities.results.DataResult;
 import com.examschedulingproject.core.utilities.results.ErrorDataResult;
 import com.examschedulingproject.core.utilities.results.Result;
 import com.examschedulingproject.dataAccess.abstracts.ICourseDao;
+import com.examschedulingproject.dataAccess.abstracts.IExamDao;
 import com.examschedulingproject.dataAccess.abstracts.IStudentDao;
 import com.examschedulingproject.entities.concretes.Course;
 import com.examschedulingproject.entities.concretes.Exam;
@@ -38,13 +39,15 @@ import com.examschedulingproject.entities.concretes.Student;
 public class ExamsController {
 	
 	private IExamService examService;
+	private IExamDao examDao;
 	private ICourseDao courseDao;
 	private IStudentDao studentDao;
 
 	@Autowired
-	public ExamsController(IExamService examService, IStudentDao studentDao, ICourseDao courseDao) {
+	public ExamsController(IExamService examService, IExamDao examDao, IStudentDao studentDao, ICourseDao courseDao) {
 		super();
 		this.examService = examService;
+		this.examDao = examDao;
 		this.courseDao = courseDao;
 		this.studentDao = studentDao;
 	}
@@ -59,9 +62,15 @@ public class ExamsController {
         return ResponseEntity.ok(this.examService.add(exam));
     }
 
+	@PutMapping("/edit/{id}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
+	public Exam updateExam(@RequestBody Exam newExam, @PathVariable Long id) {
+		return examService.updateExam(newExam, id);
+		 
+	}
 	
 	@DeleteMapping("/delete/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
 	public Result deleteById(@PathVariable("id") Long id) {
 	    return this.examService.delete(id);
 	 }
@@ -72,6 +81,12 @@ public class ExamsController {
 		return this.examService.getAllExam();
 	}
 	
+	@GetMapping("/getExamById/{id}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
+	public Exam getById(@PathVariable("id") Long id) {
+		return this.examDao.findById(id).orElseThrow();
+	}
+	
 	@GetMapping("/student/{id}")
 	@PreAuthorize("hasRole('ADMIN') or hasRole('STUDENT')")
     public DataResult<List<Exam>> getExamsByStudent(@PathVariable("id") Long studentId) {
@@ -79,13 +94,6 @@ public class ExamsController {
         
         return examService.getExamsByStudent(student);
     }
-	
-	@PutMapping("/edit/{id}")
-	@PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
-	public DataResult<Exam> updateExamById(@RequestBody Exam newExam, @PathVariable Long id) {
-		return examService.updateExamById(newExam, id);
-	}
-	
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)

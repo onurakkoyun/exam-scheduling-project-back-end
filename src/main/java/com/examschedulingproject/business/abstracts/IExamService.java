@@ -12,8 +12,8 @@ public interface IExamService {
 	Result delete(Long id);
 	DataResult<List<Exam>> getAllExam();
 	
-	DataResult<List<Exam>> getExamsByStudent(Student student);
+	Exam updateExam(Exam newExam, Long id);
 	
-	DataResult<Exam> updateExamById(Exam exam, Long id);
+	DataResult<List<Exam>> getExamsByStudent(Student student);
 
 }

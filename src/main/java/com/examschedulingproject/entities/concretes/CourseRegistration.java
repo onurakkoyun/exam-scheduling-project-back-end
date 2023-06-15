@@ -30,7 +30,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourseRegistration {
-	
+
 	@Id
 	@Column(name = "registration_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,5 +52,7 @@ public class CourseRegistration {
 	@CreationTimestamp
     @Column(name = "registeredAt", updatable = false)
     private LocalDateTime registeredAt;
+    
+    
 
 }
