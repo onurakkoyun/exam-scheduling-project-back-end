@@ -10,8 +10,8 @@ import com.examschedulingproject.entities.concretes.User;
 import com.examschedulingproject.dataAccess.abstracts.UserDao;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService{
-	
+public class UserDetailsServiceImpl implements UserDetailsService {
+
 	@Autowired
 	UserDao userDao;
 
@@ -21,6 +21,6 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 		User user = userDao.findByUsername(username)
 				.orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 		return UserDetailsImpl.build(user);
-		}
+	}
 
 }

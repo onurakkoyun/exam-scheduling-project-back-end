@@ -35,10 +35,13 @@ import com.examschedulingproject.entities.concretes.Course;
 @RequestMapping("/api/courses")
 public class CoursesController {
 	
+	@Autowired
 	private ICourseService courseService;
+	
+	@Autowired
 	private ICourseDao courseDao;
 
-	@Autowired
+	
 	public CoursesController(ICourseService courseService, ICourseDao courseDao) {
 		super();
 		this.courseService = courseService;

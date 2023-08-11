@@ -9,11 +9,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 
 @Entity
 @Table(	name = "users")
 @AllArgsConstructor
+@NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User {
 	
@@ -42,9 +44,6 @@ public class User {
 				joinColumns = @JoinColumn(name = "userId"), 
 				inverseJoinColumns = @JoinColumn(name = "roleId"))
 	private Set<Role> roles = new HashSet<>();
-	
-	public User() {
-	}
 
 	public User(String username, String email, String password) {
 		this.username = username;

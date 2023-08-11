@@ -39,10 +39,10 @@ import com.examschedulingproject.exceptions.UserNotFoundException;
 @RestController
 @RequestMapping("/api/teachers")
 public class TeachersController {
-	
+
 	private ITeacherService teacherService;
 	private ITeacherDao teacherDao;
-	
+
 	@Autowired
 	PasswordEncoder encoder;
 
@@ -52,72 +52,68 @@ public class TeachersController {
 		this.teacherService = teacherService;
 		this.teacherDao = teacherDao;
 	}
-	
+
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> addTeacher(@Valid @RequestBody Teacher teacher) {
 		return ResponseEntity.ok(this.teacherService.add(teacher));
 	}
-	
-	 @GetMapping("/getTeacherById/{id}")
-	 @PreAuthorize("hasRole('ADMIN')")
-	 public Teacher getById(@PathVariable Long id) {
-		 return teacherDao.findById(id)
-				 .orElseThrow();
-		 }
-	 
-	 @PutMapping("/updateTeacherById/{id}")
-	 @PreAuthorize("hasRole('ADMIN')")
-	 public Teacher updateTeacher(@RequestBody Teacher newTeacher, @PathVariable Long id) {
-	        return teacherDao.findById(id)
-	                .map(teacher -> {
-	                	teacher.setUsername(newTeacher.getUsername());
-	                	teacher.setEmail(newTeacher.getEmail());
-	                	teacher.setPassword(encoder.encode(newTeacher.getPassword()));
-	                	teacher.setFirstName(newTeacher.getFirstName());
-	                	teacher.setLastName(newTeacher.getLastName());
-	                	teacher.setBranch(newTeacher.getBranch());
-	                    return teacherDao.save(teacher);
-	                }).orElseThrow(() -> new UserNotFoundException(id));
-	    }
-	
+
+	@GetMapping("/getTeacherById/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
+	public Teacher getById(@PathVariable Long id) {
+		return teacherDao.findById(id).orElseThrow();
+	}
+
+	@PutMapping("/updateTeacherById/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
+	public Teacher updateTeacher(@RequestBody Teacher newTeacher, @PathVariable Long id) {
+		return teacherDao.findById(id).map(teacher -> {
+			teacher.setUsername(newTeacher.getUsername());
+			teacher.setEmail(newTeacher.getEmail());
+			teacher.setPassword(encoder.encode(newTeacher.getPassword()));
+			teacher.setFirstName(newTeacher.getFirstName());
+			teacher.setLastName(newTeacher.getLastName());
+			teacher.setBranch(newTeacher.getBranch());
+			return teacherDao.save(teacher);
+		}).orElseThrow(() -> new UserNotFoundException(id));
+	}
+
 	@DeleteMapping("/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public Result deleteById(@PathVariable("id") Long id) {
 		return this.teacherService.delete(id);
 	}
-	
+
 	@GetMapping("/getallteachers")
 	@PreAuthorize("hasRole('ADMIN')")
-	public DataResult<List<Teacher>> getAllTeacher(){
+	public DataResult<List<Teacher>> getAllTeacher() {
 		return this.teacherService.getAllTeacher();
 	}
-	
+
 	@GetMapping("/{id}/courses")
 	@PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
-	public DataResult<List<Course>> getCoursesByTeacher(@PathVariable Long id){
+	public DataResult<List<Course>> getCoursesByTeacher(@PathVariable Long id) {
 		return this.teacherService.getCoursesByTeacher(id);
 	}
-	
+
 	@GetMapping("/{id}/exams")
 	@PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
-	public DataResult<List<Exam>> getExamsByTeacherId(@PathVariable Long id){
+	public DataResult<List<Exam>> getExamsByTeacherId(@PathVariable Long id) {
 		return this.teacherService.getExamsByTeacherId(id);
 	}
-	
+
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ErrorDataResult<Object> handleValidationException(MethodArgumentNotValidException exceptions){
+	public ErrorDataResult<Object> handleValidationException(MethodArgumentNotValidException exceptions) {
 		Map<String, String> validationErrors = new HashMap<String, String>();
-		
-		for (FieldError fieldError: exceptions.getBindingResult().getFieldErrors() ) {
+
+		for (FieldError fieldError : exceptions.getBindingResult().getFieldErrors()) {
 			validationErrors.put(fieldError.getField(), fieldError.getDefaultMessage());
 		}
-		
+
 		ErrorDataResult<Object> errors = new ErrorDataResult<Object>(validationErrors, "Doğrulama Hataları");
 		return errors;
 	}
-	
-	
 
 }
